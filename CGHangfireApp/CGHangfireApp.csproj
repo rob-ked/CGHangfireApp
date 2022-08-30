@@ -53,7 +53,6 @@
     <Compile Include="Model\Entity\DataContext.cs" />
     <Compile Include="Model\Entity\Photo.cs" />
     <Compile Include="Model\Entity\Post.cs" />
-    <Compile Include="Model\Page\Pages.cs" />
     <Compile Include="Model\Page\Posts.cs" />
     <Compile Include="Model\Page\Photos.cs" />
     <Compile Include="Model\Page\Comments.cs" />
@@ -67,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="README.md" />
     <None Include="Settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

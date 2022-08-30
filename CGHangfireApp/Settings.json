@@ -1,11 +1,11 @@
 ﻿{
   "Settings": {
     "App": {
-      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGDataDB;User Id=CGDataUsr;Password=xxxx;",
+      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGDataDB;User Id=CGDataUsr;Password=jakies_haslo;",
       "JsonFilesPath": "D:\\CGHangfireAppData\\json"
     },
     "Hangfire": {
-      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGHangfireDB;User Id=CGHangfireUsr;Password=xxxx;",
+      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGHangfireDB;User Id=CGHangfireUsr;Password=jakies_haslo;",
       "Address": "127.0.0.1",
       "Port": "7777",
       "Path": "hangfire",

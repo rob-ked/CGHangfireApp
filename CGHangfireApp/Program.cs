@@ -33,38 +33,19 @@ namespace CGHangfireApp
                     throw new Exception("Nie określono listy zadań lub wszystkie zadania są wyłączone");
                 }
 
-                // ciąg połączenia z bazą danych
-                string sqlServerConnectionString = Settings.Params.Hangfire.SQLConnectionString;
+                // ciąg połączenia z bazą danych hangfire
+                string hangfireSQLServerConnectionString = Settings.Params.Hangfire.SQLConnectionString;
+                VerifyDBConfiguration(hangfireSQLServerConnectionString);
+
+                // ciąg połaczenia z bazą danych aplikacji
+                string appSQLServerConnectionString = Settings.Params.App.SQLConnectionString;
+                VerifyDBConfiguration(appSQLServerConnectionString);
 
                 // włączamy logowanie do konsoli
                 GlobalConfiguration.Configuration.UseColouredConsoleLogProvider(Settings.Params.Hangfire.LogLevel);
-
-                if (string.IsNullOrEmpty(sqlServerConnectionString))
-                {
-                    throw new Exception("Nie określono ciągu połączenia z bazą danych. Sprawdź plik Settings.json.");
-                }
-
-                // próba połączenia pozwoli nam zweryfikować działanie
-                // serwera i ewentualne błędy konfiguracji
-                using (var connection = new SqlConnection(sqlServerConnectionString))
-                {
-                    try
-                    {
-                        connection.Open();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(
-                            $"Wystapił błąd podczas próby połączenia z bazą danych. \n" +
-                            $"*** Czy Twój serwer działa? \n" +
-                            $"*** Czy użytkownik posiada właściwy zestaw uprawnień? \n" +
-                            $"*** Czy baza danych istnieje? \n" +
-                            $"*** Szczegóły błędu: {ex.Message}");
-                    }
-                }
-                
+                                
                 // 
-                GlobalConfiguration.Configuration.UseSqlServerStorage(sqlServerConnectionString);
+                GlobalConfiguration.Configuration.UseSqlServerStorage(hangfireSQLServerConnectionString);
                 
                 // uruchamiamy pulpit
                 StartOptions hangfireStartupOptions = new StartOptions();
@@ -92,6 +73,38 @@ namespace CGHangfireApp
             catch (Exception e)
             {
                 DisplayError($"{e.Message} {e.InnerException?.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Sprawdza połączenie z bazą danych
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <exception cref="Exception"></exception>
+        private static void VerifyDBConfiguration(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("Nie określono ciągu połączenia z bazą danych. Sprawdź plik Settings.json.");
+            }
+
+            // próba połączenia pozwoli nam zweryfikować działanie
+            // serwera i ewentualne błędy konfiguracji
+            using (var connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(
+                        $"Wystapił błąd podczas próby połączenia z bazą danych {connection.Database}. \n" +
+                        $"*** Czy Twój serwer działa? \n" +
+                        $"*** Czy użytkownik posiada właściwy zestaw uprawnień? \n" +
+                        $"*** Czy baza danych istnieje? \n" +
+                        $"*** Szczegóły błędu: {ex.Message}");
+                }
             }
         }
 
