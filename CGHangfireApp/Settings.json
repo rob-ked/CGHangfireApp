@@ -1,11 +1,22 @@
 ﻿{
   "Settings": {
-    "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGHangfireDB;User Id=CGHangfireUsr;Password=haslo_uzytkownika_bazy_danych;",
+    "App": {
+      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGDataDB;User Id=CGDataUsr;Password=xxxx;",
+      "JsonFilesPath": "D:\\CGHangfireAppData\\json"
+    },
     "Hangfire": {
+      "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGHangfireDB;User Id=CGHangfireUsr;Password=xxxx;",
       "Address": "127.0.0.1",
       "Port": "7777",
       "Path": "hangfire",
       "LogLevel": "Error"
-    }
+    },
+    "Jobs": [
+      {
+        "Name": "FetchRemoteData",
+        "IsActive": true,
+        "Schedule": "46 22 * * *"
+      }
+    ]
   }
 }

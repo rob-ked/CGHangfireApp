@@ -4,6 +4,9 @@ using CGHangfireApp.Helper;
 using Microsoft.Owin.Hosting;
 using System.Data.SqlClient;
 using System.Linq;
+using CGHangfireApp.Job;
+using System.Collections.Generic;
+using CGHangfireAppJob = CGHangfireApp.Model.Settings.Job;
 
 namespace CGHangfireApp
 {
@@ -22,7 +25,16 @@ namespace CGHangfireApp
         {
             try
             {
-                string sqlServerConnectionString = Settings.Params.SQLConnectionString;
+                // lista skonfigurowanych zadań
+                List<CGHangfireAppJob> jobs = Settings.Params.Jobs;
+
+                if (jobs.Count == 0 || jobs.Any(j => j.IsActive == true) == false)
+                {
+                    throw new Exception("Nie określono listy zadań lub wszystkie zadania są wyłączone");
+                }
+
+                // ciąg połączenia z bazą danych
+                string sqlServerConnectionString = Settings.Params.Hangfire.SQLConnectionString;
 
                 // włączamy logowanie do konsoli
                 GlobalConfiguration.Configuration.UseColouredConsoleLogProvider(Settings.Params.Hangfire.LogLevel);
@@ -54,7 +66,7 @@ namespace CGHangfireApp
                 // 
                 GlobalConfiguration.Configuration.UseSqlServerStorage(sqlServerConnectionString);
                 
-                // uruchamiamy aplikację
+                // uruchamiamy pulpit
                 StartOptions hangfireStartupOptions = new StartOptions();
                 hangfireStartupOptions.Urls.Add(Settings.Params.Hangfire.HangfireURL);
 
@@ -69,12 +81,102 @@ namespace CGHangfireApp
                         $"*************************************\n\n"
                     );
 
+                    // Przetwarzamy zadania do wykonania
+                    ProcessJobList(jobs);                 
+
+                    //
                     Console.ReadKey();
                 }
+                
             }
             catch (Exception e)
             {
                 DisplayError($"{e.Message} {e.InnerException?.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Przetwarza listę zadań
+        /// </summary>
+        /// <param name="jobs"></param>
+        /// <exception cref="Exception"></exception>
+        private static void ProcessJobList(List<CGHangfireAppJob> jobs)
+        {
+            var jobClasses = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IJob).IsAssignableFrom(p) && p.Name.Equals("IJob") == false);
+
+            var configuredJobCounter = 0;
+
+            foreach (CGHangfireAppJob job in jobs)
+            {
+                var jobClass = jobClasses.FirstOrDefault(j => j.Name == $"Job{job.Name}");
+                if (jobClass != null)
+                {
+                    var jobInstance = (IJob)Activator.CreateInstance(jobClass);
+                    jobInstance.SetSchedule(job.Schedule);
+
+                    if (job.IsActive)
+                    {
+                        configuredJobCounter++;
+                        ConfigureJob(jobInstance);
+                    }
+                    else
+                    {
+                        RemoveJob(jobInstance);
+                    }
+                }
+            }
+
+            if (configuredJobCounter == 0)
+            {                
+                throw new Exception("Nie skonfigurowano żadnych zadań do wykonania. " +
+                    "Sprawdź swoją konfigurację. Dostępne zadania to: \n" +
+                    String.Join(",\n", jobClasses.Select(j => j.Name.Remove(0, 3)).ToArray())
+                );
+            }
+        }
+
+        /// <summary>
+        /// Konfiguruje zadanie
+        /// </summary>
+        /// <param name="job"></param>
+        private static void ConfigureJob(IJob job)
+        {
+            if (job.GetSchedule() != null)
+            {
+                Console.WriteLine($"Konfiguruje zadanie rekurencyjne {job.GetName()} - {job.GetDescription()}");                
+                RecurringJob.AddOrUpdate
+                (
+                    job.GetName(),
+                    () => job.Run(),
+                    job.GetSchedule(),
+                    TimeZoneInfo.Local
+                );
+            }
+            else
+            {
+                Console.WriteLine($"Konfiguruje zadanie jednorazowe {job.GetName()} - {job.GetDescription()}");
+                BackgroundJob.Enqueue
+                (
+                    () => job.Run()
+                );
+            }
+        }
+
+        /// <summary>
+        /// Usuwa zadanie z harmonogramu
+        /// </summary>
+        /// <param name="job"></param>
+        private static void RemoveJob(IJob job)
+        {
+            if (job.GetSchedule() != null)
+            {
+                Console.WriteLine($"Usuwam zadanie rekurencyjne z harmonogramu {job.GetName()} - {job.GetDescription()}");
+                RecurringJob.RemoveIfExists
+                (
+                    job.GetName()
+                );
             }
         }
 

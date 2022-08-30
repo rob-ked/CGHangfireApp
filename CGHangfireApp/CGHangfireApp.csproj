@@ -45,8 +45,15 @@
   <ItemGroup>
     <Compile Include="Helper\HangfireDashboard.cs" />
     <Compile Include="Helper\Settings.cs" />
-    <Compile Include="Model\Hangfire.cs" />
-    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Job\IJob.cs" />
+    <Compile Include="Job\JobFetchRemoteData.cs" />
+    <Compile Include="Model\Entity\Comment.cs" />
+    <Compile Include="Model\Entity\Photo.cs" />
+    <Compile Include="Model\Entity\Post.cs" />
+    <Compile Include="Model\Settings\App.cs" />
+    <Compile Include="Model\Settings\Hangfire.cs" />
+    <Compile Include="Model\Settings\Job.cs" />
+    <Compile Include="Model\Settings\Settings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

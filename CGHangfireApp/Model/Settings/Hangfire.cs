@@ -1,7 +1,7 @@
 ﻿using HLogging = Hangfire.Logging;
 using System.Text.Json.Serialization;
 
-namespace CGHangfireApp.Model
+namespace CGHangfireApp.Model.Settings
 {
     /// <summary>
     /// Ustawienia specyficzne dla Hanfgire
@@ -11,6 +11,11 @@ namespace CGHangfireApp.Model
         private readonly string _addressFallbackValue = "127.0.0.1";
         private readonly string _portFallbackValue = "7777";
         private readonly string _pathFallbackValue = "hangfire";
+
+        /// <summary>
+        /// Ciąg połączenia z bazą danych
+        /// </summary>
+        public string SQLConnectionString { get; set; }
 
         private string _address;
         /// <summary>

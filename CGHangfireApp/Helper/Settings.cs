@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
+using CGHangfireAppSettings = CGHangfireApp.Model.Settings.Settings;
 
 namespace CGHangfireApp.Helper
 {
     public sealed class Settings
     {
-        private static Model.Settings _params;
-        public static Model.Settings Params
+        private static CGHangfireAppSettings _params;
+        public static CGHangfireAppSettings Params
         {
             get
             {
@@ -33,7 +34,7 @@ namespace CGHangfireApp.Helper
                 .AddEnvironmentVariables()
                 .Build();
 
-            _params = config.GetRequiredSection("Settings").Get<Model.Settings>();
+            _params = config.GetRequiredSection("Settings").Get<CGHangfireAppSettings>();
         }
     }
 }
