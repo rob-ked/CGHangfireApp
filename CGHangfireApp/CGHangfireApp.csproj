@@ -46,8 +46,10 @@
     <Compile Include="Helper\HangfireDashboard.cs" />
     <Compile Include="Helper\Settings.cs" />
     <Compile Include="Job\IJob.cs" />
+    <Compile Include="Job\JobCopyDataToDB.cs" />
     <Compile Include="Job\JobFetchRemoteData.cs" />
     <Compile Include="Model\Entity\Comment.cs" />
+    <Compile Include="Model\Entity\DataContext.cs" />
     <Compile Include="Model\Entity\Photo.cs" />
     <Compile Include="Model\Entity\Post.cs" />
     <Compile Include="Model\Settings\App.cs" />
@@ -64,6 +66,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EntityFramework">
+      <Version>6.4.4</Version>
+    </PackageReference>
     <PackageReference Include="Hangfire.Core">
       <Version>1.7.31</Version>
     </PackageReference>

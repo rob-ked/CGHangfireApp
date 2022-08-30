@@ -16,6 +16,11 @@
         "Name": "FetchRemoteData",
         "IsActive": true,
         "Schedule": "46 22 * * *"
+      },
+      {
+        "Name": "CopyDataToDB",
+        "IsActive": true,
+        "Schedule": "10 * * * *"
       }
     ]
   }
