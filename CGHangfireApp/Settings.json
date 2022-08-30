@@ -21,6 +21,11 @@
         "Name": "CopyDataToDB",
         "IsActive": true,
         "Schedule": "10 * * * *"
+      },
+      {
+        "Name": "FetchDataFromDB",
+        "IsActive": true,
+        "Schedule": "*/5 * * * *"
       }
     ]
   }

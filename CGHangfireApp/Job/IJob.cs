@@ -16,6 +16,6 @@ namespace CGHangfireApp.Job
 
         string GetSchedule();
 
-        void Run();
+        string Run();
     }
 }

@@ -43,12 +43,14 @@ namespace CGHangfireApp.Job
             return _schedule;
         }
 
-        public void Run()
+        public string Run()
         {
             foreach (string endpoint in new string[] { "posts", "comments", "photos" })
             {
                 DownloadAndSave(endpoint);
             }
+
+            return "Pobrano dane";
         }
 
         /// <summary>

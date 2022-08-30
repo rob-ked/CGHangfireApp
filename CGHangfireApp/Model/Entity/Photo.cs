@@ -2,7 +2,7 @@
 
 namespace CGHangfireApp.Model.Entity
 {
-    internal class Photo
+    public class Photo
     {
         [Key]
         public int Id { get; set; }

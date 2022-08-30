@@ -39,12 +39,14 @@ namespace CGHangfireApp.Job
             return _schedule;
         }
 
-        public void Run()
+        public string Run()
         {
             foreach (string file in new string[] { "posts", "comments", "photos" })
             {
                 ReadAndSave(file);
             }
+
+            return "Przetworzono dane";
         }
 
         /// <summary>
