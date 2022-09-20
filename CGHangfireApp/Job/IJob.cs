@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,6 @@ namespace CGHangfireApp.Job
 
         string GetSchedule();
 
-        string Run();
+        string Run(PerformContext context);
     }
 }

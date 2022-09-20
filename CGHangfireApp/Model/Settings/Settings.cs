@@ -7,6 +7,8 @@ namespace CGHangfireApp.Model.Settings
     /// </summary>
     public class Settings
     {
+        public Api Api { get; set; }
+
         public App App { get; set; }
 
         /// <summary>

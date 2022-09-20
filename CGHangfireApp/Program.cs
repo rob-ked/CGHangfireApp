@@ -7,6 +7,7 @@ using System.Linq;
 using CGHangfireApp.Job;
 using System.Collections.Generic;
 using CGHangfireAppJob = CGHangfireApp.Model.Settings.Job;
+using Hangfire.Console;
 
 namespace CGHangfireApp
 {
@@ -40,15 +41,15 @@ namespace CGHangfireApp
                 // ciąg połaczenia z bazą danych aplikacji
                 string appSQLServerConnectionString = Settings.Params.App.SQLConnectionString;
                 VerifyDBConfiguration(appSQLServerConnectionString);
-
-                // włączamy logowanie do konsoli
-                GlobalConfiguration.Configuration.UseColouredConsoleLogProvider(Settings.Params.Hangfire.LogLevel);
                                 
                 // 
-                GlobalConfiguration.Configuration.UseSqlServerStorage(hangfireSQLServerConnectionString);
+                GlobalConfiguration.Configuration
+                    .UseColouredConsoleLogProvider(Settings.Params.Hangfire.LogLevel)
+                    .UseSqlServerStorage(hangfireSQLServerConnectionString)
+                    .UseConsole();
                 
                 // uruchamiamy pulpit
-                StartOptions hangfireStartupOptions = new StartOptions();
+                StartOptions hangfireStartupOptions = new StartOptions();                
                 hangfireStartupOptions.Urls.Add(Settings.Params.Hangfire.HangfireURL);
 
                 using (WebApp.Start<HangfireStartup>(hangfireStartupOptions))
@@ -158,11 +159,11 @@ namespace CGHangfireApp
         {
             if (job.GetSchedule() != null)
             {
-                Console.WriteLine($"Konfiguruje zadanie rekurencyjne {job.GetName()} - {job.GetDescription()}");                
+                Console.WriteLine($"Konfiguruje zadanie rekurencyjne {job.GetName()} - {job.GetDescription()}");
                 RecurringJob.AddOrUpdate
                 (
                     job.GetName(),
-                    () => job.Run(),
+                    () => job.Run(null),
                     job.GetSchedule(),
                     TimeZoneInfo.Local
                 );
@@ -172,7 +173,7 @@ namespace CGHangfireApp
                 Console.WriteLine($"Konfiguruje zadanie jednorazowe {job.GetName()} - {job.GetDescription()}");
                 BackgroundJob.Enqueue
                 (
-                    () => job.Run()
+                    () => job.Run(null)
                 );
             }
         }

@@ -7,6 +7,8 @@ using CommentsPage = CGHangfireApp.Model.Page.Comments;
 using PostsPage = CGHangfireApp.Model.Page.Posts;
 using PhotosPage = CGHangfireApp.Model.Page.Photos;
 using System.Text.RegularExpressions;
+using Hangfire.Server;
+using Hangfire.Console;
 
 namespace CGHangfireApp.Job
 {
@@ -42,8 +44,9 @@ namespace CGHangfireApp.Job
             return _schedule;
         }
 
-        public string Run()
+        public string Run(PerformContext context)
         {
+            context.WriteLine("Rozpoczynam pracę");
             return ReadAndDisplay();            
         }
 

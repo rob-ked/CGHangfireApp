@@ -9,7 +9,7 @@ namespace CGHangfireApp.Model.Entity
 {
     public class Comment
     {
-        [Key]
+        [Key]        
         public int Id { get; set; }
         public int PostId { get; set; }
         public string Name { get; set; }

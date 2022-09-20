@@ -57,6 +57,7 @@
     <Compile Include="Model\Page\Photos.cs" />
     <Compile Include="Model\Page\Comments.cs" />
     <Compile Include="Model\Page\Page.cs" />
+    <Compile Include="Model\Settings\Api.cs" />
     <Compile Include="Model\Settings\App.cs" />
     <Compile Include="Model\Settings\Hangfire.cs" />
     <Compile Include="Model\Settings\Job.cs" />
@@ -74,6 +75,9 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="Hangfire.Console">
+      <Version>1.4.2</Version>
     </PackageReference>
     <PackageReference Include="Hangfire.Core">
       <Version>1.7.31</Version>

@@ -1,4 +1,6 @@
 ﻿using CGHangfireApp.Helper;
+using Hangfire.Console;
+using Hangfire.Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace CGHangfireApp.Job
         /// <summary>
         /// Bazowe URL API
         /// </summary>
-        private string _apiBaseURL = "https://jsonplaceholder.typicode.com";
+        private string _apiBaseURL = Settings.Params.Api.BaseURL;
 
         /// <summary>
         /// Konfiguracja harmonogramu zgodna z CRON (* * * * *)
@@ -43,13 +45,15 @@ namespace CGHangfireApp.Job
             return _schedule;
         }
 
-        public string Run()
+        public string Run(PerformContext context)
         {
-            foreach (string endpoint in new string[] { "posts", "comments", "photos" })
+            context.WriteLine($"Rozpoczynam pracę");
+            foreach (string endpoint in Settings.Params.Api.Endpoints)
             {
+                context.WriteLine($"Przetwarzam {endpoint}");
                 DownloadAndSave(endpoint);
             }
-
+            context.WriteLine($"Konczę pracę");
             return "Pobrano dane";
         }
 

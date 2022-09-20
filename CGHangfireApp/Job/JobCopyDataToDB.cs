@@ -1,5 +1,7 @@
 ﻿using CGHangfireApp.Helper;
 using CGHangfireApp.Model.Entity;
+using Hangfire.Console;
+using Hangfire.Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -39,12 +41,15 @@ namespace CGHangfireApp.Job
             return _schedule;
         }
 
-        public string Run()
+        public string Run(PerformContext context)
         {
-            foreach (string file in new string[] { "posts", "comments", "photos" })
+            context.WriteLine("Rozpoczynam pracę");
+            foreach (string file in Settings.Params.Api.Endpoints)
             {
+                context.WriteLine($"Przerwarzam dane dla pliku {file}");
                 ReadAndSave(file);
             }
+            context.WriteLine("Koncze pracę");
 
             return "Przetworzono dane";
         }

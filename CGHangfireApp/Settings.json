@@ -1,5 +1,9 @@
 ﻿{
   "Settings": {
+    "Api": {
+      "BaseURL": "https://jsonplaceholder.typicode.com",
+      "Endpoints": [ "posts", "comments", "photos" ]      
+    },
     "App": {
       "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGDataDB;User Id=CGDataUsr;Password=jakies_haslo;",
       "JsonFilesPath": "D:\\CGHangfireAppData\\json"

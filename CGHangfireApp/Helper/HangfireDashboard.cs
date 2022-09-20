@@ -14,8 +14,8 @@ namespace CGHangfireApp.Helper
     {
         public void Configuration(IAppBuilder app)
         {
-            app.UseHangfireServer();
-            app.UseHangfireDashboard("/dashboard");                 
+            app.UseHangfireServer()
+                .UseHangfireDashboard("/dashboard");
         }
     }
 }
