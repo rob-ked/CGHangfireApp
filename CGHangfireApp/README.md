@@ -44,11 +44,17 @@ Przykładowa aplikacja
 ## Konfiguracja (Settings.json)
 
 Uzupełnij plik Settings.json dostarczony wraz z aplikacją. Możesz pominąć parametry w sekcjach "Hangfire" i "App"
-(poza SQLConnectionString) - aplikacja zastosuje domyślne wartości (jak poniżej). Dla sekcji "Jobs" dostępne są jedynie wymienione w konfiguracji zadania. Możesz sterować ich statusem (IsActive - true/false) oraz harmonogramem wykonania (zgodnie z CRON, np. https://crontab.cronhub.io/)
+(poza SQLConnectionString) - aplikacja zastosuje domyślne wartości (jak poniżej). 
+Dla sekcji "Jobs" dostępne są jedynie wymienione w konfiguracji zadania. Możesz sterować ich statusem (IsActive - true/false) oraz harmonogramem wykonania (zgodnie z CRON, np. https://crontab.cronhub.io/)
+Nie zmianiaj konfiguracji Api - ona tutaj jest, bo jest i tyle :P
 
 ```json
 {
   "Settings": {
+    "Api": {
+      "BaseURL": "https://jsonplaceholder.typicode.com",
+      "Endpoints": [ "posts", "comments", "photos" ]      
+    },
     "App": {
       "SQLConnectionString": "Server=.\\SQLEXPRESS01;Database=CGDataDB;User Id=CGDataUsr;Password=jakies_haslo;",
       "JsonFilesPath": "D:\\CGHangfireAppData\\json"
